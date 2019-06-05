@@ -1,30 +1,51 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { StatusBar } from '@ionic-native/status-bar';
+import {BrowserModule, HAMMER_GESTURE_CONFIG} from '@angular/platform-browser';
+import {ErrorHandler, NgModule} from '@angular/core';
+import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
+import {SplashScreen} from '@ionic-native/splash-screen';
+import {StatusBar} from '@ionic-native/status-bar';
 
-import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
+import {MyApp} from './app.component';
+
+/* Plugins */
+import {BarcodeScanner} from "@ionic-native/barcode-scanner";
+import {LongPressModule} from "ionic-long-press";
+import * as ionicGalleryModal from 'ionic-gallery-modal';
+
+/* Pages */
+import {HomePage, LoginPage, ProductoPage} from "../pages/index.page";
+
+/* Provider */
+import {ToastProvider} from '../providers/index.provider';
+
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    LoginPage,
+    ProductoPage
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    LongPressModule,
+    IonicModule.forRoot(MyApp),
+    ionicGalleryModal.GalleryModalModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    LoginPage,
+    ProductoPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    BarcodeScanner,
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    {provide: HAMMER_GESTURE_CONFIG, useClass: ionicGalleryModal.GalleryModalHammerConfig},
+    ToastProvider
   ]
 })
-export class AppModule {}
+export class AppModule {
+}

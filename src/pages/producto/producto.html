@@ -1,0 +1,61 @@
+<ion-header>
+
+  <ion-navbar>
+
+    <ion-title>Buscar Producto(s)</ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only end [color]="selections.length > 0 ? 'secondary': 'danger'">
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+      </button>
+    </ion-buttons>
+
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding content-root>
+
+  <div class="header-selection" margin-bottom>
+    <ion-label padding-left> Cantidad Seleccionada</ion-label>
+    <ion-badge item-end margin-right>{{ selections.length }}</ion-badge>
+  </div>
+
+  <button ion-button color="dark" outline (click)="ordenar()" float-end>
+    Ordenar
+  </button>
+
+  <ion-list>
+
+    <button no-padding ion-item full
+            *ngFor="let producto of items" (click)="selected(producto)"
+            ion-long-press [interval]="400" (onPressing)="showImage(producto)">
+      <ion-label padding-left>{{ producto.Descripcion }}</ion-label>
+      <!--<ion-badge item-end [color]="inspeccion.Estado">{{ inspeccion.Estado }}</ion-badge>-->
+      <ion-checkbox color="primary" mode="ios" [checked]="producto.Select"
+                    (click)="selected(producto.ID)" item-right></ion-checkbox>
+    </button>
+
+  </ion-list>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar color="dark">
+
+    <div class="content-search">
+      <ion-searchbar placeholder="Código - Descripción" [(ngModel)]="result" clearInput></ion-searchbar>
+      <div class="content-buttons">
+
+        <button ion-button icon-only float-end (click)="scanNow()">
+          <ion-icon name="barcode"></ion-icon>
+        </button>
+        <button ion-button icon-only float-end color="danger">
+          <ion-icon name="search"></ion-icon>
+        </button>
+
+      </div>
+    </div>
+
+  </ion-toolbar>
+</ion-footer>
