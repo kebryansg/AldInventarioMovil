@@ -18,13 +18,16 @@ import {HomePage, LoginPage, ProductoPage} from "../pages/index.page";
 import {ToastProvider, CrudProvider} from '../providers/index.provider';
 import {HttpClientModule} from "@angular/common/http";
 
+/* Pipes */
+import {PipesModule} from "../pipes/pipes.module";
+
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     LoginPage,
-    ProductoPage
+    ProductoPage,
   ],
   imports: [
     BrowserModule,
@@ -32,6 +35,7 @@ import {HttpClientModule} from "@angular/common/http";
     HttpClientModule,
     IonicModule.forRoot(MyApp),
     ionicGalleryModal.GalleryModalModule,
+    PipesModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [

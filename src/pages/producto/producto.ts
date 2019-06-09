@@ -11,32 +11,48 @@ import {CrudProvider} from "../../providers/crud/crud";
 })
 export class ProductoPage {
 
-  search: string;
+  search: string = '';
 
-  lsProductos: Productos;
+  lsProductos: Productos = {
+    items: [],
+    count: 0
+  };
 
-  selections: any[] = [];
+  selections: Producto[] = [];
   canViewImage: boolean = true;
+  countInfiniteScroll: number;
 
   constructor(public navCtrl: NavController,
               private barcodeScanner: BarcodeScanner,
               private modalCtrl: ModalController,
               public toast: ToastProvider,
               public crud: CrudProvider) {
+    this.countInfiniteScroll = 0;
   }
 
   ionViewDidLoad() {
-    this.crud.get('producto', {
-      limite: 15
-    }).then((result: any) => this.lsProductos = result)
+    this.getProductos();
   }
 
   selected(item: Producto) {
-    item.Select = !item.Select;
-  }
 
-  ordenar() {
-    this.lsProductos.items.sort((a, b) => (a.Select) ? -1 : 1);
+    if (item.Select) {
+      // Quitar de Selections
+      let idx = this.selections.findIndex(producto => item.IDPD == producto.IDPD);
+      this.selections.splice(idx, 1);
+      this.lsProductos.items = [...this.lsProductos.items, {
+        ...item,
+        Select: false
+      }];
+    } else {
+      // Agregar de Selections
+      let idx = this.lsProductos.items.findIndex(producto => item.IDPD == producto.IDPD);
+      this.lsProductos.items.splice(idx, 1);
+      this.selections = [...this.selections, {
+        ...item,
+        Select: true
+      }];
+    }
   }
 
   showImage(producto: Producto) {
@@ -44,7 +60,7 @@ export class ProductoPage {
       this.canViewImage = false;
       let modal = this.modalCtrl.create(GalleryModal, {
         photos: [{
-          url: producto.Image,
+          url: producto.Image || 'assets/imgs/logo.png',
           title: producto.Nombre
         }],
         initialSlide: 0,
@@ -77,6 +93,21 @@ export class ProductoPage {
       console.log('Ha ocurrido un error', err);
       this.search = "Ha ocurrido un error";
     });
+  }
+
+  getSelections() {
+    return this.selections.map(producto => producto.IDPD);
+  }
+
+  getProductos() {
+    this.crud.get('producto', {
+      limite: 30,
+      search: this.search,
+      exclude: this.getSelections().join(',') || ''
+    }).then((result: Productos) => {
+      this.lsProductos = result;
+      this.toast.showToast(`Cant. Productos: ${result.count}`, 1500, 'top')
+    })
   }
 
 }

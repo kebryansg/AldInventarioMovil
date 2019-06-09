@@ -13,10 +13,11 @@ export class ToastProvider {
     this.showToast(msg)
   }
 
-  private showToast(msg: string) {
+  showToast(msg: string, duration?: number, position?: string) {
     this.toast.create({
       message: msg,
-      duration: 2000
+      position: position || 'bottom',
+      duration: duration || 2000
     }).present()
   }
 

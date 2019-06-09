@@ -21,21 +21,23 @@
     <ion-badge item-end margin-right>{{ selections.length }}</ion-badge>
   </div>
 
-  <button ion-button color="dark" outline (click)="ordenar()" float-end>
-    Ordenar
-  </button>
 
   <ion-list>
-
     <button no-padding ion-item full
-            *ngFor="let producto of lsProductos?.items " (click)="selected(producto)"
+            *ngFor="let producto of selections | merge: lsProductos?.items"
+            (click)="selected(producto)"
             ion-long-press [interval]="400" (onPressing)="showImage(producto)">
       <ion-label padding-left>{{ producto.Nombre }}</ion-label>
       <!--<ion-badge item-end [color]="inspeccion.Estado">{{ inspeccion.Estado }}</ion-badge>-->
-      <ion-checkbox color="primary" mode="ios" [checked]="producto.Select"
-                    (click)="selected(producto.IDPD)" item-right></ion-checkbox>
-    </button>
 
+      <ion-icon [color]="producto.Select? 'danger': 'primary'"
+                [md]="producto.Select? 'md-remove-circle': 'md-add-circle'"
+                item-right></ion-icon>
+
+
+      <!--<ion-checkbox color="primary" mode="ios" [checked]="producto.Select"-->
+      <!--(click)="selected(producto)" item-right></ion-checkbox>-->
+    </button>
   </ion-list>
 
 </ion-content>
@@ -44,15 +46,17 @@
   <ion-toolbar color="dark">
 
     <div class="content-search">
-      <ion-searchbar placeholder="Código - Descripción" [(ngModel)]="search" clearInput></ion-searchbar>
+      <ion-searchbar placeholder="Código - Descripción" [debounce]="750" [(ngModel)]="search"
+                     (ionInput)="getProductos()" clearInput></ion-searchbar>
       <div class="content-buttons">
 
-        <button ion-button icon-only float-end (click)="scanNow()">
+        <button ion-button icon-only float-end (click)="scanNow()" color="danger">
           <ion-icon name="barcode"></ion-icon>
         </button>
-        <button ion-button icon-only float-end color="danger">
-          <ion-icon name="search"></ion-icon>
-        </button>
+
+        <!--<button ion-button icon-only float-end color="danger">-->
+        <!--<ion-icon name="search"></ion-icon>-->
+        <!--</button>-->
 
       </div>
     </div>
