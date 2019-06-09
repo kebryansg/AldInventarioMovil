@@ -28,12 +28,12 @@
   <ion-list>
 
     <button no-padding ion-item full
-            *ngFor="let producto of items" (click)="selected(producto)"
+            *ngFor="let producto of lsProductos?.items " (click)="selected(producto)"
             ion-long-press [interval]="400" (onPressing)="showImage(producto)">
-      <ion-label padding-left>{{ producto.Descripcion }}</ion-label>
+      <ion-label padding-left>{{ producto.Nombre }}</ion-label>
       <!--<ion-badge item-end [color]="inspeccion.Estado">{{ inspeccion.Estado }}</ion-badge>-->
       <ion-checkbox color="primary" mode="ios" [checked]="producto.Select"
-                    (click)="selected(producto.ID)" item-right></ion-checkbox>
+                    (click)="selected(producto.IDPD)" item-right></ion-checkbox>
     </button>
 
   </ion-list>
@@ -44,7 +44,7 @@
   <ion-toolbar color="dark">
 
     <div class="content-search">
-      <ion-searchbar placeholder="Código - Descripción" [(ngModel)]="result" clearInput></ion-searchbar>
+      <ion-searchbar placeholder="Código - Descripción" [(ngModel)]="search" clearInput></ion-searchbar>
       <div class="content-buttons">
 
         <button ion-button icon-only float-end (click)="scanNow()">

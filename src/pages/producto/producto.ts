@@ -3,6 +3,7 @@ import {ModalController, NavController} from 'ionic-angular';
 import {BarcodeScanner} from "@ionic-native/barcode-scanner";
 import {ToastProvider} from "../../providers/toast/toast";
 import {GalleryModal} from 'ionic-gallery-modal';
+import {CrudProvider} from "../../providers/crud/crud";
 
 @Component({
   selector: 'page-producto',
@@ -10,51 +11,24 @@ import {GalleryModal} from 'ionic-gallery-modal';
 })
 export class ProductoPage {
 
-  private result: string;
+  search: string;
 
-  items: Producto[] = [
-    {
-      ID: 1,
-      Codigo: '00001',
-      Descripcion: 'Sony Televisor',
-      Image: 'assets/imgs/logo.png'
-    },
-    {
-      ID: 2,
-      Codigo: '00002',
-      Descripcion: 'LG Televisor',
-      Image: 'assets/imgs/logo.png'
-    },
-    {
-      ID: 3,
-      Codigo: '00003',
-      Descripcion: 'Lavadora MABE 150kg',
-      Image: 'assets/imgs/logo.png'
-    },
-    {
-      ID: 4,
-      Codigo: '00004',
-      Descripcion: 'Cocina Indurama',
-      Image: 'assets/imgs/logo.png'
-    },
-    {
-      ID: 5,
-      Codigo: '00005',
-      Descripcion: 'Cocina Electrolux',
-      Image: 'assets/imgs/logo.png'
-    }
-  ];
+  lsProductos: Productos;
+
   selections: any[] = [];
   canViewImage: boolean = true;
 
   constructor(public navCtrl: NavController,
               private barcodeScanner: BarcodeScanner,
               private modalCtrl: ModalController,
-              public toast: ToastProvider) {
+              public toast: ToastProvider,
+              public crud: CrudProvider) {
   }
 
   ionViewDidLoad() {
-    // console.log('ionViewDidLoad ProductoPage', this.items);
+    this.crud.get('producto', {
+      limite: 15
+    }).then((result: any) => this.lsProductos = result)
   }
 
   selected(item: Producto) {
@@ -62,16 +36,16 @@ export class ProductoPage {
   }
 
   ordenar() {
-    this.items.sort((a, b) => (a.Select) ? -1 : 1);
+    this.lsProductos.items.sort((a, b) => (a.Select) ? -1 : 1);
   }
 
-  showImage(producto: any) {
+  showImage(producto: Producto) {
     if (this.canViewImage) {
       this.canViewImage = false;
       let modal = this.modalCtrl.create(GalleryModal, {
         photos: [{
           url: producto.Image,
-          title: producto.Descripcion
+          title: producto.Nombre
         }],
         initialSlide: 0,
       });
@@ -98,19 +72,25 @@ export class ProductoPage {
      } */
     ).then(barcodeData => {
       console.log('Barcode data', JSON.stringify(barcodeData));
-      this.result = barcodeData.text;
+      this.search = barcodeData.text;
     }).catch(err => {
       console.log('Ha ocurrido un error', err);
-      this.result = "Ha ocurrido un error";
+      this.search = "Ha ocurrido un error";
     });
   }
 
 }
 
+interface Productos {
+  items: Producto[],
+  count: number
+}
+
 interface Producto {
-  ID: number;
+  IDPD: number;
   Codigo: string;
-  Descripcion: string;
-  Image: string;
+  CodigoExterno: string;
+  Nombre: string;
+  Image?: string;
   Select?: boolean;
 }

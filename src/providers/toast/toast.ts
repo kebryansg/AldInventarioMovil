@@ -5,7 +5,7 @@ import {ToastController} from "ionic-angular";
 export class ToastProvider {
 
   constructor(public toast: ToastController) {
-    console.log('Hello ToastProvider Provider');
+    // console.log('Hello ToastProvider Provider');
   }
 
   showNotFoundImagen() {

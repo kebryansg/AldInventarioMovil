@@ -15,7 +15,8 @@ import * as ionicGalleryModal from 'ionic-gallery-modal';
 import {HomePage, LoginPage, ProductoPage} from "../pages/index.page";
 
 /* Provider */
-import {ToastProvider} from '../providers/index.provider';
+import {ToastProvider, CrudProvider} from '../providers/index.provider';
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import {ToastProvider} from '../providers/index.provider';
   imports: [
     BrowserModule,
     LongPressModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp),
     ionicGalleryModal.GalleryModalModule,
   ],
@@ -44,7 +46,8 @@ import {ToastProvider} from '../providers/index.provider';
     BarcodeScanner,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     {provide: HAMMER_GESTURE_CONFIG, useClass: ionicGalleryModal.GalleryModalHammerConfig},
-    ToastProvider
+    ToastProvider,
+    CrudProvider
   ]
 })
 export class AppModule {
